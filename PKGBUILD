@@ -10,8 +10,8 @@ arch=(any)
 url="http://lolilolicon.github.com/contagious"
 license=('MIT')
 depends=(bash aria2)
-source=(http://github.com/downloads/lolilolicon/$pkgname/$pkgname-$pkgver.tar.gz)
-md5sum=(3404dbc0a9797ad66785f6501e810202)
+source=(https://github.com/downloads/lolilolicon/$pkgname/$pkgname-$pkgver.tar.gz)
+md5sums=('3404dbc0a9797ad66785f6501e810202')
 
 build() {
   cd "$srcdir/$pkgname-$pkgver"
@@ -25,7 +25,7 @@ package() {
 
   # install sample profiles
   install -d "$pkgdir"/usr/share/${pkgname}/contagious.d/
-  install -m 644 contagious.d/* "$pkgdir"/usr/share/${pkgname}/contagious.d/
+  cp -r contagious.d/* "$pkgdir"/usr/share/${pkgname}/contagious.d/
   install -m 644 README.md "$pkgdir"/usr/share/${pkgname}/
 }
 

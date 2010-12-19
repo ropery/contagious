@@ -45,7 +45,7 @@ But when you set `filepath` to `/`, the mirror _is_ the URI. This is designed
 for the less consistent mirrors.
 
 `hashtype` and `hashsum` are optional, but recommended so that aria2 ensures
-correct download by check integrity.
+correct download by integrity check.
 
 `aria2c_opts` is for fine-tuning download options per profile.
 
