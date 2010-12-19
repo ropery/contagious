@@ -1,0 +1,22 @@
+# This is a profile for contagious.
+# @profile firefox
+# @variables filename filepath hashsum hashtype mirrors aria2_opts
+
+# NOTE:
+# 1. Set filepath to "/" if URIs in mirrors are complete links to the file.
+# 2. Otherwise, the final URI will be: mirror + filepath + filename
+# 3. hashsum and hashtype are optional, but needed for integrity check.
+# 4. hashtype examples: md5 sha1 sha256
+
+pkgname=firefox
+pkgver=3.6.13
+filename=${pkgname}-${pkgver}.source.tar.bz2
+filepath=${pkgname}/releases/${pkgver}/source
+hashsum='4b90775c0f29cb7e170a80894311d8c7a2cd794c50e2124b70d1b83011c45f63'
+hashtype=sha256
+unset pkgname pkgver
+
+# mirrors
+source "${profiles_dir}"/common/mozilla
+
+# vim:ft=sh ts=2 sw=2:

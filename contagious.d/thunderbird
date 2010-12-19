@@ -1,0 +1,16 @@
+# This is a profile for contagious.
+# @profile thunderbird
+# @variables filename filepath hashsum hashtype mirrors aria2_opts
+
+pkgname=thunderbird
+pkgver=3.1.7
+filename=${pkgname}-${pkgver}.source.tar.bz2
+filepath=${pkgname}/releases/${pkgver}/source
+hashsum='be64630152a2d5a824a76752594e7596'
+hashtype=md5
+unset pkgname pkgver
+
+# mirrors
+source "${profiles_dir}"/common/mozilla
+
+# vim:ft=sh ts=2 sw=2:

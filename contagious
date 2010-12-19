@@ -1,0 +1,81 @@
+#!/bin/bash
+# For your crappy internet connection.
+
+profiles_dir=${XDG_CONFIG_HOME:-${HOME}/.config}/contagious.d
+
+# Generate the metalink XML
+# @global filename hashtype hashsum uris
+gen_metalink()
+{
+  local metalink uri urltype
+  metalink='<?xml version="1.0" encoding="utf-8"?>'
+  metalink+=$'\n''<metalink version="3.0" xmlns="http://www.metalinker.org/">'
+  metalink+=$'\n''<files>'
+
+  metalink+=$'\n'"  <file name=\"${filename}\">"
+  if [ -n "${hashtype}" ] && [ -n "${hashsum}" ]; then
+    metalink+=$'\n'"    <verification>"
+    metalink+=$'\n'"      <hash type=\"${hashtype}\">${hashsum}</hash>"
+    metalink+=$'\n'"    </verification>"
+  fi
+  metalink+=$'\n'"    <resources>"
+  for uri in "${uris[@]}"; do
+    urltype=${uri%%://*}
+    metalink+=$'\n'"      <url type=\"${urltype}\">${uri}</url>"
+  done
+  metalink+=$'\n'"    </resources>"
+  metalink+=$'\n'"  </file>"
+
+  metalink+=$'\n''</files>'
+  metalink+=$'\n''</metalink>'
+  echo "${metalink}"
+}
+# @global: uris mirrors filepath filename
+# Note when filepath is "/", mirrors _are_ uris.
+populate_uris()
+{
+  local m
+  uris=()
+  if [ "${filepath}" == '/' ]; then
+    uris=("${mirrors[@]}")
+  elif [ -z "${filepath}" ]; then
+    for m in "${mirrors[@]}"; do
+      uris+=(${m%/}/${filename})
+    done
+  else
+    for m in "${mirrors[@]}"; do
+      uris+=(${m%/}/${filepath%/}/${filename})
+    done
+  fi
+}
+check_profile_env()
+{
+  if [ ${#mirrors[@]} -eq 0 ]; then
+    echo 'You must provide at least one mirror!' >&2
+    return 1
+  elif [ -z "${filename}" ]; then
+    echo 'filename is empty!' >&2
+    return 1
+  fi
+}
+check_profile_file()
+{
+  if [ -z "${profile}" ]; then
+    echo "You must specify a profile under directory \`${profiles_dir}'" >&2
+  elif [ ! -r "${profiles_dir}/${profile}" ]; then
+    echo "File nonexistent or unreadable: \`${profiles_dir}/${profile}'" >&2
+  elif [ -d "${profiles_dir}/${profile}" ]; then
+    echo "It's a directory: \`${profiles_dir}/${profile}'" >&2
+  else
+    return 0
+  fi
+  return 250
+}
+
+profile=$1; check_profile_file || exit $?
+filename= filepath= hashtype= hashsum= mirrors=() aria2_opts=
+source "${profiles_dir%/}/${profile}" && check_profile_env || exit $?
+populate_uris
+gen_metalink | aria2c --metalink-file=- --metalink-servers=40 --min-split-size=1M --lowest-speed-limit=10K ${aria2_opts}
+
+# vim:ts=2 sw=2 ft=sh:

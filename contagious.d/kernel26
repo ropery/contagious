@@ -1,0 +1,32 @@
+# This is a profile for contagious.
+# @profile kernel26
+# @variables filename filepath hashsum hashtype mirrors aria2_opts
+
+pkgver=2.6.36
+filename=linux-${pkgver}.tar.bz2
+filepath=kernel/v2.6
+hashsum='61f3739a73afb6914cb007f37fb09b62'
+hashtype=md5
+unset pkgver
+aria2_opts='--lowest-speed-limit=5K --min-split-size=512K --metalink-servers=60'
+
+mirrors=(
+  http://www.kernel.org/pub/linux/
+  ftp://ftp.kernel.org/pub/linux/
+)
+for cc in af al aq ar at au ax az ba be bg bm br by ca ch ck cl cn co cr cy cz \
+  de dk ec ee eh es fi fo fr gf gi gl gr hr ht hu id ie il in io is it jm jp \
+  kg kr kz li lt lu lv mc md me mk mx my nl no nz pa pe ph pl pr pt py ro rs \
+  ru se sg si sj sk sm sr th tm tw ua uk us uy va ve vg vi za; do
+  mirrors+=(http://www.${cc}.kernel.org/pub/linux/)
+done
+for cc in aq ar at au ax az ba be bg bm br by ca ch ck cl cn co cr cy cz de dk \
+  ec ee eh es fi fo fr gf gi gl gr hr ht hu ie il in is it jm jp kg kz li lt \
+  lu lv mc md me mx my nl no nz pa pe ph pl pr pt py ro rs ru se sg si sj sk \
+  sm sr sz tm tr tw ua uk us uy va ve vg vi za; do
+  mirrors+=(ftp://ftp.${cc}.kernel.org/pub/linux/)
+done
+unset cc
+
+# vim:ft=sh ts=2 sw=2:
+
