@@ -8,7 +8,7 @@ filepath=kernel/v2.6
 hashsum='61f3739a73afb6914cb007f37fb09b62'
 hashtype=md5
 unset pkgver
-aria2_opts='--lowest-speed-limit=5K --min-split-size=512K --metalink-servers=60'
+aria2_opts='--lowest-speed-limit=5K --metalink-servers=60'
 
 mirrors=(
   http://www.kernel.org/pub/linux/
